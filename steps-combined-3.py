@@ -130,17 +130,18 @@ test_outdoor = outdoor_games.sample(n=10)
 #-------------------------Step 2: Weather
 
 station = test_outdoor['Weather_Station']
-start = test_outdoor['Short_Date']
-end = test_outdoor['Short_Date']
-api_key = '123456789'
+date = test_outdoor['Short_Date']
+api_key = 'obcnO9Ye'
 
 
-def get_weather_data(test_outdoor):
+def get_weather_data(row):
     try:
-        daily_weather_api_call = 'https://api.meteostat.net/v1/history/daily?station={station}&start={start}&end={end}&key={api_key}'    
-        resp = requests.get(daily_weather_api_call.format(station=station, start=start, end=end, api_key=api_key))
+        daily_weather_api_call = 'https://api.meteostat.net/v1/history/daily?station={station}&start={date}&end={date}&key={api_key}'    
+        resp = requests.get(daily_weather_api_call.format(station=station, date=date, api_key=api_key))
         
         resp_json = resp.json()
+        html_json = json.loads(resp_json)
+        df_json = pd.json_normalize(html_json['data'])
         time.sleep(0.5)
         return resp_json
     
@@ -148,52 +149,5 @@ def get_weather_data(test_outdoor):
         raise e
  
 test_outdoor['API_response'] = test_outdoor.apply(get_weather_data,axis=1)
-test_outdoor['API_response'].head()
+#print(test_outdoor['API_response'].head())
 
-
-
-
-
-
-
-#API Call Info
-#daily_weather_slug = 'https://api.meteostat.net/v1/history/daily?'
-#daily_call = daily_weather_slug + station + '&' + start + '&' + end + '&' + key
-
-#API Variables
-#station = 'station=' + test_outdoor['Weather_Station']
-#start = 'start=' + test_outdoor['Short_Date']
-#end = 'end=' + test_outdoor['Short_Date']
-#key = 'key=123456789' #This is my personal API key
-
-#
-
-
-#weather_daily = DataFrame(resp.json()['data'])
-
-#weather_json = []
-
-#def get_home_game_weather(station, start, end, api_key):
-
-#    daily_weather_api_call = 'https://api.meteostat.net/v1/history/daily?station={station}&start={start}&end={end}&key={api_key}'    
-#    resp = requests.get(daily_weather_api_call.format(station=station, start=start, end=end, api_key=api_key))
-#        if resp.status_code == 200:
-#                content=response.json()['data'][0]
-#                station_id = content['id']
-#                station_cache[(latitude,longitude)] = station_id
-
-
-#    for game in outdoor_games:
-#        station = 'station=' + station
-#        start = 'start=' + start
-    
-    
-    
-    
-    
-    
-    
-#.format(name, age)
-
-
-#Weather_Hour metrics I want: Temperature, DewPoint, Humidity, Precipitation, WindSpeed, pressure
