@@ -122,7 +122,7 @@ master_data['Short_Date'] = master_data['Short_Date'].apply(lambda x: x.strftime
 #Get just the outdoor games
 outdoor_games =  master_data[master_data.Roof_Type == 'Open']
 
-#Using a Sample Test group tp preserve API calls for when I inevitable fuck everything up
+#Using a Sample Test group tp preserve API calls for when I inevitably fuck everything up
 test_outdoor = outdoor_games.sample(n=10)
 
 
@@ -132,7 +132,7 @@ test_outdoor = outdoor_games.sample(n=10)
 station = test_outdoor['Weather_Station']
 start = test_outdoor['Short_Date']
 end = test_outdoor['Short_Date']
-api_key = 'obcnO9Ye'
+api_key = '123456789'
 
 
 def get_weather_data(test_outdoor):
@@ -164,7 +164,7 @@ test_outdoor['API_response'].head()
 #station = 'station=' + test_outdoor['Weather_Station']
 #start = 'start=' + test_outdoor['Short_Date']
 #end = 'end=' + test_outdoor['Short_Date']
-#key = 'key=obcnO9Ye' #This is my personal API key
+#key = 'key=123456789' #This is my personal API key
 
 #
 
