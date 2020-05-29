@@ -5,7 +5,7 @@ import numpy as np
 from datetime import datetime
 from os import path
 import json
-from pandas.io.json import json_normalize
+
 
 #Not sure why this didn't work...want to find out
 #for i in range(2014, 2020):
@@ -126,28 +126,25 @@ outdoor_games =  master_data[master_data.Roof_Type == 'Open']
 test_outdoor = outdoor_games.sample(n=10)
 
 
-
 #-------------------------Step 2: Weather
+
 
 station = test_outdoor['Weather_Station']
 date = test_outdoor['Short_Date']
 api_key = 'obcnO9Ye'
 
 
-def get_weather_data(row):
-    try:
-        daily_weather_api_call = 'https://api.meteostat.net/v1/history/daily?station={station}&start={date}&end={date}&key={api_key}'    
-        resp = requests.get(daily_weather_api_call.format(station=station, date=date, api_key=api_key))
+
+def get_weather():
+        for game in test_outdoor:
         
-        resp_json = resp.json()
-        html_json = json.loads(resp_json)
-        df_json = pd.json_normalize(html_json['data'])
-        time.sleep(0.5)
-        return resp_json
-    
-    except Exception as e:
-        raise e
- 
-test_outdoor['API_response'] = test_outdoor.apply(get_weather_data,axis=1)
-#print(test_outdoor['API_response'].head())
+            api_url = 'https://api.meteostat.net/v1/history/daily?'
+            full_url = api_url + 'station=' + station + '&start=' + date + '&end=' + date + '&key=' + api_key
+            response = requests.get(full_url)
+            json_data = response.json()
+            data = json.load(json_data)
+            
+            print(data)
+        
+what_is_this = get_weather()
 
