@@ -134,7 +134,7 @@ api_url = 'https://api.meteostat.net/v1/history/daily?'
 
 for _, game in test_outdoor.iterrows():
     
-    station = game['Weather_Station']
+    station = test_outdoor['Weather_Station']
     date = test_outdoor['Short_Date']
     params = {'station': station, 'start': date, 'end': date, 'key': api_key}
     response = requests.get(api_url, params=params)
