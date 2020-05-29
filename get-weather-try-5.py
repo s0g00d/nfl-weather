@@ -129,22 +129,32 @@ test_outdoor = outdoor_games.sample(n=10)
 #-------------------------Step 2: Weather
 
 
-station = test_outdoor['Weather_Station']
-date = test_outdoor['Short_Date']
 api_key = 'obcnO9Ye'
+api_url = 'https://api.meteostat.net/v1/history/daily?'
 
+for _, game in test_outdoor.iterrows():
+    
+    station = game['Weather_Station']
+    date = test_outdoor['Short_Date']
+    params = {'station': station, 'start': date, 'end': date, 'key': api_key}
+    response = requests.get(api_url, params=params)
+    json_data = response.json()
+    weather_data = json_data['data']
 
+    
+    for item in weather_data:
+    
+        temperature = weather_data[0]['temperature']
+        precipitation = weather_data[0]['precipitation']
+        windspeed = weather_data[0]['windspeed']
+        pressure = weather_data[0]['pressure']
+    
+        weather_df =  pd.DataFrame(
+        {'Temp': temperature,
+        'Precip': precipitation,
+        'Wind_Speed': windspeed,
+        'Air_Pressure': pressure
+        }, index=[0])
+    
 
-def get_weather():
-        for game in test_outdoor:
-        
-            api_url = 'https://api.meteostat.net/v1/history/daily?'
-            full_url = api_url + 'station=' + station + '&start=' + date + '&end=' + date + '&key=' + api_key
-            response = requests.get(full_url)
-            json_data = response.json()
-            data = json.load(json_data)
-            
-            print(data)
-        
-what_is_this = get_weather()
 
